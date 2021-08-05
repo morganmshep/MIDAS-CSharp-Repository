@@ -1,0 +1,29 @@
+        /// <summary> 
+        /// This method will call MIDAS API to get a Json Web Token 
+        /// </summary> 
+        /// <returns></returns> 
+        public bool GetToken(out string newToken, out string responsemessage) 
+        {             
+
+            HttpClient client = new HttpClient();             
+            client.BaseAddress = new Uri(APIBASE); 
+            string username = "jsmith"; 
+            string password = "yourlongpassword"; 
+            // Entire concatenated string of username:password must be 
+            // Base64 encoded. 
+            string encodedcredentials = Base64Encode(username + “:” + password); 
+            client.DefaultRequestHeaders.Add("Authorization", "Basic " + encodedcredentials); 
+
+            // call the token resource's GET verb 
+            HttpResponseMessage response = Task.Run(() => client.GetAsync("token")).GetAwaiter().GetResult(); 
+
+     // token will be returned in header named Token. Pull value from header. 
+            newToken = response.Headers.GetValues("Token").FirstOrDefault(); 
+
+     // Pull response content. Success or failure will have response content. 
+            responsemessage = Task.Run(() => response.Content.ReadAsStringAsync()).GetAwaiter().GetResult(); 
+
+     // will return success true or false so that logic decision can be made  
+     // after method call. 
+       return response.IsSuccessStatusCode;  
+        } 
