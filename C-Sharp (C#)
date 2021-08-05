@@ -1,0 +1,35 @@
+using System; 
+using System.Collections.Generic; 
+using System.Linq; 
+using System.Threading.Tasks; 
+using System.Net; 
+using System.Net.Http; 
+using System.Net.Http.Headers; 
+using System.Text; 
+using System.Xml.Linq; 
+namespace MIDAS_API_Examples 
+{ 
+    public class MIDAS_API_Calls 
+    { 
+        private const string APIBASE = @"https://cecwats2.org/api/"; 
+
+        /// <summary> 
+        /// Adds double quotes on both sides of passed in value 
+        /// </summary> 
+        /// <param name="value"></param> 
+        /// <returns></returns> 
+        private string Quoted(string value) 
+        {  
+            return Convert.ToChar(34).ToString() + value + Convert.ToChar(34).ToString(); 
+        } 
+        
+        /// <summary> 
+        /// Converts plain text value to Base64 Encoded. 
+        /// </summary> 
+        /// <param name="textToEncode"></param> 
+        /// <returns></returns> 
+        public string Base64Encode(string textToEncode) 
+        { 
+             byte[] textAsBytes = Encoding.UTF8.GetBytes(textToEncode); 
+             return Convert.ToBase64String(textAsBytes); 
+        } 
