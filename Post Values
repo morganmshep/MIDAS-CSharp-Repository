@@ -1,0 +1,49 @@
+        /// <summary> 
+        /// This method will call the MIDAS API to POST price data in xmlData parameter 
+        /// </summary> 
+        /// <param name="xmlData"></param> 
+        /// <param name="Token"></param> 
+        /// <param name="textresponse"></param> 
+        /// <returns></returns> 
+       public bool PostValueData(string xmlData, string Token, out string textresponse) 
+        { 
+            // Check to make sure XML Data is in valid form 
+            if (!XMLTryParse(xmlData)) 
+            { 
+                textresponse = "Error: XML was not well formed."; 
+       return false; 
+            }             
+            HttpClient client = new HttpClient();             
+            client.BaseAddress = new Uri(APIBASE); 
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xml")); 
+       client.DefaultRequestHeaders.Add("Authorization", "Bearer " + Token); 
+            var content = new StringContent(xmlData, 
+                System.Text.Encoding.UTF8,  
+                "text/xml"); 
+             
+            // Post Asyncronously 
+HttpResponseMessage response = client.PostAsync("ValueData",content).GetAwaiter().GetResult(); 
+             
+            // Read response Asyncronously 
+textresponse = response.Content.ReadAsStringAsync().GetAwaiter().GetResult(); 
+        return response.IsSuccessStatusCode; 
+        } 
+        /// <summary> 
+        /// This method will try to Parse XML data and return boolean value 
+        /// as to whether the Parse was successful. 
+        /// </summary> 
+        /// <param name="xml"></param> 
+        /// <returns></returns> 
+        private bool XMLTryParse(string xml) 
+        { 
+            bool returnValue = false; 
+            try 
+            { 
+                XDocument.Parse(xml); 
+                returnValue = true; 
+            } 
+            catch (Exception e) 
+            {  
+            } 
+            return returnValue; 
+        } 
