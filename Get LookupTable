@@ -1,0 +1,34 @@
+        /// <summary> 
+        /// This method calls the MIDAS API and returns the Upload Code and Description for key Lookup tables. 
+        /// This will allow outside entities to know the correct lookup values to use when doing 
+        /// </summary> 
+        /// <param name="LookupTable">Possible values:  
+        ///   | country | daytype | distribution | enduse 
+        ///   | energy | location | ratetype | sector | state | timezone</param> 
+        /// <param name="Token"></param> 
+        /// <param name="Format">xml or json</param> 
+        /// <param name="errormessage"></param> 
+        /// <returns></returns> 
+        public string GetLookupTable(string LookupTable, string Token, string Format,out string errormessage) 
+        { 
+             string content = string.Empty; 
+             HttpResponseMessage response = new HttpResponseMessage(); 
+             HttpClient client = new HttpClient();             
+             client.BaseAddress = new Uri(APIBASE); 
+             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/" + Format )); 
+      client.DefaultRequestHeaders.Add("Authorization", "Bearer " + Token); 
+     string geturi = string.Format("ValueData?LookupTable={0}", LookupTable); 
+             try 
+             { 
+       response = client.GetAsync(geturi).GetAwaiter().GetResult(); 
+             } 
+             catch (Exception ex) 
+             {  
+                errormessage = ex.Message; 
+                return string.Empty; 
+             } 
+             errormessage = string.Empty; 
+   content  = response.Content.ReadAsStringAsync().GetAwaiter().GetResult(); 
+ 
+            return content; 
+        } 
