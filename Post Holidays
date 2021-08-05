@@ -1,0 +1,46 @@
+        /// <summary> 
+        /// This can only be called by users with Utility Role and are an Energy Company 
+        /// </summary> 
+        private void PostHolidays() 
+        {  
+             
+            HttpClient client = new HttpClient(); 
+            client.BaseAddress = new Uri(APIBASE); 
+ 
+            // Create JSON string with Holidays 
+            string jsonparameters =  
+@"[ 
+   { 
+      " + Quoted("DateOfHoliday") + ":" + Quoted("2021-12-25") + "," + 
+      Quoted("HolidayDescription") + ":" + Quoted("Christmas Day") +  
+   "}," +  
+   "{" + 
+      Quoted("DateOfHoliday") + ":" + Quoted("2021-07-04") + "," + 
+      Quoted("HolidayDescription") + ":" + Quoted("Independance Day") +  
+   "}," + 
+   "{" + 
+      Quoted("DateOfHoliday") + ":" + Quoted("2021-01-01") + "," + 
+      Quoted("HolidayDescription") + ":" + Quoted("New Years Day") + 
+   "}]"; 
+    
+            StringContent content = new StringContent(jsonparameters, 
+                System.Text.Encoding.UTF8,  
+                "application/json"); 
+             
+            // Post Asyncronously 
+            HttpResponseMessage response = client.PostAsync("Holiday", content).GetAwaiter().GetResult(); 
+             
+            // Read response Asyncronously 
+            string message = response.Content.ReadAsStringAsync().GetAwaiter().GetResult(); 
+            if (response.IsSuccessStatusCode) 
+            { 
+                // Code for success 
+            } 
+            else 
+            {  
+               // Code for failure 
+            } 
+        } 
+    } 
+    } 
+} 
