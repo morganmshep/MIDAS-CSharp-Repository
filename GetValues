@@ -1,0 +1,35 @@
+       /// <summary> 
+       /// This method will call the MIDAS API to get pricing data for specified 
+       /// RateID.  
+       /// </summary> 
+       /// <param name="RateID"></param> 
+       /// <param name="QueryType">realtime or alldata</param> 
+       /// <param name="Format">xml or json</param> 
+       /// <returns></returns> 
+        public string GetValueData(string RateID, string QueryType, string Format,string Token,out string errormessage) 
+        {              
+             HttpClient client = new HttpClient(); 
+             HttpResponseMessage responseMessage = new HttpResponseMessage(); 
+             string responseContent = string.Empty; 
+             client.BaseAddress = new Uri(APIBASE); 
+             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/" + Format)); 
+             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + Token); 
+             string geturi = string.Format("ValueData?id={0}&querytype={1}",RateID, QueryType); 
+             try 
+             { 
+                responseMessage = client.GetAsync(geturi).GetAwaiter().GetResult(); 
+             } 
+             catch (Exception e) 
+             { 
+                errormessage = e.Message; 
+                return string.Empty; 
+             } 
+             // no error message so errormessage will be empty 
+             errormessage = string.Empty; 
+              
+             // Pull response content. 
+             responseContent  = responseMessage.Content.ReadAsStringAsync().GetAwaiter().GetResult(); 
+              
+             // return response data in XML or JSON text based on Format parameter 
+             return responseContent; 
+        } 
