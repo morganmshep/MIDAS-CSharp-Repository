@@ -1,0 +1,41 @@
+/// <summary> 
+/// This method will call the MIDAS API to register a new account 
+/// </summary> 
+/// <param name="responsemessage"></param> 
+/// <returns></returns> 
+private bool Register(out string responsemessage) 
+        {            
+            HttpClient client = new HttpClient();             
+            client.BaseAddress = new Uri(APIBASE); 
+                                     
+            string username = Base64Encode("jsmith"); 
+            string password = Base64Encode("mylongpassword"); 
+            string email = Base64Encode("jsmith@gmail.net"); 
+            string fullname = Base64Encode("John Smith"); 
+ 
+// Organization is optional and can be set to string.empty 
+            string organization = Base64Encode("Avalon Gas & Electic CO.");  
+
+            string jsonparameters = "{" + Quoted("fullname") + ":" + Quoted(fullname); 
+if (organization.Length > 0) 
+            { 
+                jsonparameters += "," + Quoted("organization") + ":" + Quoted(organization); 
+            } 
+            jsonparameters += "," + 
+                Quoted("username") + ":" + Quoted(username) + "," + 
+                Quoted("password") + ":" + Quoted(password) + "," + 
+                Quoted("emailaddress") + ":" + Quoted(email) + "}"; 
+                      
+StringContent content = new StringContent(jsonparameters, 
+                System.Text.Encoding.UTF8,  
+                "application/json"); 
+             
+// Call the registration resources's POST verb asyncronously 
+HttpResponseMessage response = client.PostAsync("Registration", content).GetAwaiter().GetResult(); 
+             
+// Read response text asyncronously 
+responsemessage = response.Content.ReadAsStringAsync().GetAwaiter().GetResult(); 
+            
+
+return response.IsSuccessStatusCode; 
+        } 
