@@ -1,0 +1,41 @@
+       /// <summary> 
+        /// Gets a list of RINs and their signal types 
+        /// </summary> 
+        /// <param name="signaltype"> 
+       /// Acceptable values: 
+        /// 0 = All signal types 
+        /// 1 = Tariff signals only 
+        /// 2 = Green House Gas Emissions only 
+        /// 3 = Flex Alerts only 
+        /// </param> 
+        /// <param name="mediatype"> 
+        /// Acceptable values: json or xml 
+        /// </param> 
+        /// <param name="errormessage"></param> 
+        /// <returns></returns> 
+        public string GetRINList(int signaltype,string mediatype, out string errormessage) 
+        {  
+            string responsemessage = string.Empty; 
+            HttpClient client = new HttpClient(); 
+            string apibase = @"https://cecwats2.org/api/"; 
+            client.BaseAddress = new Uri(apibase); 
+            HttpResponseMessage response = new HttpResponseMessage(); 
+            client.BaseAddress = new Uri(apibase);            
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/" + mediatype )); 
+             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + tbTokenValue.Text.Trim()); 
+             string geturi = string.Format("valuedata?SignalType={0}", signaltype); 
+             
+             try 
+             { 
+                  response = client.GetAsync(geturi).GetAwaiter().GetResult(); 
+             } 
+             catch (Exception ex) 
+             {  
+                   errormessage = ex.Message; 
+                   return string.Empty; 
+             } 
+             responsemessage  = response.Content.ReadAsStringAsync().GetAwaiter().GetResult(); 
+             errormessage = string.Empty; 
+             return responsemessage; 
+         
+        } 
