@@ -11,7 +11,7 @@ namespace MIDAS_API_Examples
 { 
     public class MIDAS_API_Calls 
     { 
-        private const string APIBASE = @"https://cecwats2.org/api/"; 
+        private const string APIBASE = @"https://midasapi.energy.ca.gov/api/"; 
 
         /// <summary> 
         /// Adds double quotes on both sides of passed in value 
