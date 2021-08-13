@@ -17,7 +17,7 @@
         {  
             string responsemessage = string.Empty; 
             HttpClient client = new HttpClient(); 
-            string apibase = @"https://cecwats2.org/api/"; 
+            string apibase = @"https://midasapi.energy.ca.gov/api/"; 
             client.BaseAddress = new Uri(apibase); 
             HttpResponseMessage response = new HttpResponseMessage(); 
             client.BaseAddress = new Uri(apibase);            
